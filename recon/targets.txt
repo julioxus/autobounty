@@ -1,1 +1,1 @@
-criticalmatch.app
+example.org

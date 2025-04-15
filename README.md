@@ -20,6 +20,6 @@ This project automates bug bounty reconnaissance, vulnerability scanning, screen
 Clone the repository and start the stack:
 
 ```bash
-git clone https://github.com/youruser/autobounty.git
+git clone https://github.com/julioxus/autobounty.git
 cd autobounty
 docker-compose up --build
