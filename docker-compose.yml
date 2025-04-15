@@ -33,16 +33,19 @@ services:
       context: ./web/backend
       dockerfile: ../../docker/Dockerfile.backend
     volumes:
-      - ./recon/output:/app/output
+      - ./recon/output:/app/output:ro
+      - ./web/backend/server.js:/app/server.js:ro
     ports:
       - "3001:3001"
+    environment:
+      - NODE_ENV=development
 
   frontend:
     build:
       context: ./web/frontend
       dockerfile: ../../docker/Dockerfile.frontend
     volumes:
-      - ./recon/output:/app/output
+      - ./recon/output:/app/output:ro
     ports:
       - "3000:80"
     depends_on:

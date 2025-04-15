@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
-const fetchList = async (file) =>
-  fetch(`http://localhost:3001/data/${file}`).then((res) => res.json());
+const fetchList = async (file) => {
+  console.log(`http://localhost:3001/data/${file}`);
+  return fetch(`http://localhost:3001/data/${file}`).then((res) => res.json());
+}
 
 export default function App() {
   const [liveHosts, setLiveHosts] = useState([]);
