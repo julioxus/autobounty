@@ -1,0 +1,8 @@
+FROM golang:1.24-alpine AS builder
+
+RUN apk add --no-cache bash curl git && \
+    go install github.com/projectdiscovery/dnsx/cmd/dnsx@latest && \
+    go install github.com/projectdiscovery/httpx/cmd/httpx@latest && \
+    go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
+
+ENV PATH="/go/bin:$PATH"

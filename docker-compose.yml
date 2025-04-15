@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  recon:
+    build:
+      context: ./recon
+      dockerfile: ../docker/Dockerfile.recon
+    volumes:
+      - ./recon:/app/recon
+    working_dir: /app/recon
+    entrypoint: ["sh", "run_recon.sh"]
+
+  nuclei:
+    build:
+      context: ./recon
+      dockerfile: ../docker/Dockerfile.nuclei
+    volumes:
+      - ./recon/:/app/recon
+    working_dir: /app/recon
+    entrypoint: ["sh", "run_nuclei.sh"]
+
+  gowitness:
+    build:
+      context: ./recon
+      dockerfile: ../docker/Dockerfile.gowitness
+    volumes:
+      - ./recon/:/app/recon
+    working_dir: /app/recon
+    entrypoint: ["sh", "run_gowitness.sh"]
+
+  backend:
+    build:
+      context: ./web/backend
+      dockerfile: ../../docker/Dockerfile.backend
+    volumes:
+      - ./recon/output:/app/output
+    ports:
+      - "3001:3001"
+
+  frontend:
+    build:
+      context: ./web/frontend
+      dockerfile: ../../docker/Dockerfile.frontend
+    volumes:
+      - ./recon/output/screenshots:/app/dist/screenshots
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
