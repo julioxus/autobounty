@@ -9,8 +9,8 @@ export default function App() {
   const [screenshots, setScreenshots] = useState([]);
 
   useEffect(() => {
-    fetchList('live.txt').then(setLiveHosts);
-    fetchList('nuclei-results.txt').then(setNucleiResults);
+    fetchList('./output/live.txt').then(setLiveHosts);
+    fetchList('./output/nuclei-results.txt').then(setNucleiResults);
 
     fetch('/screenshots/')
       .then((res) => res.text())

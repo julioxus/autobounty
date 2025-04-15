@@ -42,7 +42,7 @@ services:
       context: ./web/frontend
       dockerfile: ../../docker/Dockerfile.frontend
     volumes:
-      - ./recon/output/screenshots:/app/dist/screenshots
+      - ./recon/output:/app/output
     ports:
       - "3000:80"
     depends_on:

@@ -5,9 +5,9 @@ const app = express();
 const cors = require('cors');
 
 app.use(cors());
-app.use('/screenshots', express.static(path.join(__dirname, '../../recon/output/screenshots')));
+app.use('/screenshots', express.static(path.join(__dirname, './output/screenshots')));
 
-const basePath = path.join(__dirname, '../../recon/output');
+const basePath = path.join(__dirname, './output');
 
 app.get('/data/:file', (req, res) => {
   const filePath = path.join(basePath, req.params.file);
