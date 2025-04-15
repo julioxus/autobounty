@@ -4,7 +4,7 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
 const fetchList = async (file) => {
   try {
-    const response = await fetch(`/data/${file}`);
+    const response = await fetch(`${API_BASE_URL}/data/${file}`);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -83,24 +83,13 @@ export default function App() {
         setLiveHosts(hosts);
         setNucleiResults(results);
 
-        const response = await fetch('/screenshots/');
+        const response = await fetch(`${API_BASE_URL}/screenshots/`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         
-        const html = await response.text();
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html');
-        
-        const files = Array.from(doc.querySelectorAll('a'))
-          .map((a) => a.href)
-          .filter(href => href.endsWith('.jpeg'))
-          .map(href => {
-            const filename = href.split('/').pop();
-            return `/screenshots/${filename}`;
-          });
-        
-        setScreenshots(files);
+        const data = await response.json();
+        setScreenshots(data.screenshots);
       } catch (err) {
         console.error('Error fetching data:', err);
         setError('Error al cargar los datos. Por favor, intente nuevamente.');

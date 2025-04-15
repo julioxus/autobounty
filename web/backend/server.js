@@ -13,7 +13,12 @@ const BASE_PATH = path.join('/app/output');
 const SCREENSHOTS_PATH = path.join('/app/output/screenshots');
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: ['http://localhost:5173', 'http://localhost:3000'],
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type'],
+  credentials: true
+}));
 app.use(morgan('dev')); // Logging
 app.use(express.json());
 
@@ -28,6 +33,7 @@ app.use(limiter);
 app.use('/screenshots', express.static(SCREENSHOTS_PATH, {
   setHeaders: (res, path) => {
     res.set('Cross-Origin-Resource-Policy', 'cross-origin');
+    res.set('Access-Control-Allow-Origin', '*');
   }
 }));
 
@@ -63,6 +69,7 @@ app.get('/screenshots/:filename', (req, res) => {
     // Establecer los encabezados de respuesta
     res.setHeader('Content-Type', contentType);
     res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+    res.setHeader('Access-Control-Allow-Origin', '*');
     
     // Enviar el archivo
     res.sendFile(filePath);
@@ -83,26 +90,7 @@ app.get('/screenshots/', (req, res) => {
       .filter(file => file.endsWith('.jpeg') || file.endsWith('.jpg') || file.endsWith('.png'))
       .map(file => `/screenshots/${file}`);
 
-    // Devolver un HTML simple con enlaces a los archivos
-    const html = `
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <title>Screenshots</title>
-          <style>
-            body { font-family: Arial, sans-serif; margin: 20px; }
-            a { display: block; margin-bottom: 10px; }
-          </style>
-        </head>
-        <body>
-          <h1>Screenshots</h1>
-          ${files.map(file => `<a href="${file}">${file.split('/').pop()}</a>`).join('')}
-        </body>
-      </html>
-    `;
-
-    res.setHeader('Content-Type', 'text/html');
-    res.send(html);
+    res.json({ screenshots: files });
   } catch (error) {
     console.error('Error listing screenshots:', error);
     res.status(500).json({ error: 'Internal server error' });
