@@ -88,7 +88,7 @@ app.get('/screenshots/', (req, res) => {
 
     const files = fs.readdirSync(SCREENSHOTS_PATH)
       .filter(file => file.endsWith('.jpeg') || file.endsWith('.jpg') || file.endsWith('.png'))
-      .map(file => `/screenshots/${file}`);
+      .map(file => `${req.protocol}://${req.get('host')}/screenshots/${file}`);
 
     res.json({ screenshots: files });
   } catch (error) {

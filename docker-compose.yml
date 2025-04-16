@@ -9,6 +9,8 @@ services:
       - ./recon:/app/recon
     working_dir: /app/recon
     entrypoint: ["sh", "run_recon.sh"]
+    networks:
+      - autobounty-network
 
   nuclei:
     build:
@@ -18,6 +20,8 @@ services:
       - ./recon/:/app/recon
     working_dir: /app/recon
     entrypoint: ["sh", "run_nuclei.sh"]
+    networks:
+      - autobounty-network
 
   gowitness:
     build:
@@ -27,6 +31,8 @@ services:
       - ./recon/:/app/recon
     working_dir: /app/recon
     entrypoint: ["sh", "run_gowitness.sh"]
+    networks:
+      - autobounty-network
 
   backend:
     build:
@@ -40,6 +46,8 @@ services:
       - "3001:3001"
     environment:
       - NODE_ENV=development
+    networks:
+      - autobounty-network
 
   frontend:
     build:
@@ -51,3 +59,9 @@ services:
       - "3000:80"
     depends_on:
       - backend
+    networks:
+      - autobounty-network
+
+networks:
+  autobounty-network:
+    driver: bridge

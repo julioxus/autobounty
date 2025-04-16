@@ -36,6 +36,55 @@ const ImageModal = ({ imageUrl, onClose }) => {
     return () => window.removeEventListener('keydown', handleEscape);
   }, [onClose]);
 
+  const getDomainFromImageUrl = (url) => {
+    try {
+      console.log('URL completa:', url);
+      
+      const filename = url.split('/').pop();
+      console.log('Nombre del archivo:', filename);
+      
+      const lastDotIndex = filename.lastIndexOf('.');
+      const nameWithoutExtension = lastDotIndex !== -1 ? filename.substring(0, lastDotIndex) : filename;
+      console.log('Nombre sin extensión:', nameWithoutExtension);
+      
+      let domain = nameWithoutExtension;
+      
+      if (domain.includes('---')) {
+        domain = domain.replace(/---/g, '://').replace(/-/g, '.');
+      } else if (domain.includes('--')) {
+        domain = domain.replace(/--/g, '://').replace(/-/g, '.');
+      } else if (domain.includes('_')) {
+        domain = domain.replace(/_/g, '.');
+      } else if (domain.includes('-')) {
+        domain = domain.replace(/-/g, '.');
+      }
+      
+      domain = domain.replace(/^https?:\/\//, '');
+      domain = domain.replace(/^www\./, '');
+      
+      const portMatch = domain.match(/\.(\d+)$/);
+      if (portMatch) {
+        const port = portMatch[1];
+        domain = domain.replace(/\.\d+$/, `:${port}`);
+      }
+      
+      domain = domain.replace(/\.$/, '');
+      
+      console.log('Dominio extraído:', domain);
+      
+      if (!domain.includes('.')) {
+        console.warn('Dominio posiblemente incompleto:', domain);
+      }
+      
+      return domain;
+    } catch (error) {
+      console.error('Error al extraer el dominio de la URL:', error);
+      return 'Dominio desconocido';
+    }
+  };
+
+  const domainTitle = getDomainFromImageUrl(imageUrl);
+
   return (
     <div 
       className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"
@@ -45,15 +94,18 @@ const ImageModal = ({ imageUrl, onClose }) => {
         className="relative max-w-4xl w-full"
         onClick={e => e.stopPropagation()}
       >
-        <button
-          onClick={onClose}
-          className="absolute -top-10 right-0 text-gray-400 hover:text-white transition-colors"
-        >
-          <TerminalText className="text-xl">[X] Cerrar</TerminalText>
-        </button>
+        <div className="absolute -top-16 left-0 right-0 flex justify-between items-center">
+          <TerminalText className="text-blue-400 text-xl">{domainTitle}</TerminalText>
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-white transition-colors"
+          >
+            <TerminalText className="text-xl">[X] Cerrar</TerminalText>
+          </button>
+        </div>
         <img 
           src={imageUrl} 
-          alt="Screenshot ampliada" 
+          alt={`Screenshot de ${domainTitle}`} 
           className="w-full h-auto rounded-lg border border-blue-500/20"
         />
       </div>
