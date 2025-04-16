@@ -7,4 +7,6 @@ while [ ! -f output/live.txt ]; do
 done
 
 echo "live.txt found. Starting nuclei..."
+mkdir output/nuclei
+touch output/nuclei/nuclei-results.txt
 exec nuclei -l output/live.txt -t cves/ -o output/nuclei-results.txt
