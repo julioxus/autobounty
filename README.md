@@ -14,12 +14,68 @@ This project automates bug bounty reconnaissance, vulnerability scanning, screen
 
 - Docker
 - Docker Compose
+- Make
 
 ## 🚀 Getting Started
 
-Clone the repository and start the stack:
+Clone the repository:
 
 ```bash
 git clone https://github.com/julioxus/autobounty.git
 cd autobounty
-docker-compose up --build
+```
+
+### Using Makefile
+
+The project includes a Makefile to simplify common operations:
+
+```bash
+# Start all services
+make all-up
+
+# Start only recon services
+make recon-up
+
+# Start only web services
+make web-up
+
+# View logs
+make all-logs    # All services
+make recon-logs  # Only recon services
+make web-logs    # Only web services
+
+# Stop services
+make all-down    # All services
+make recon-down  # Only recon services
+make web-down    # Only web services
+
+# Build images
+make all-build   # All services
+make recon-build # Only recon services
+make web-build   # Only web services
+
+# Clean everything (containers, volumes, and output files)
+make clean
+
+# Show all available commands
+make help
+```
+
+### Manual Docker Compose
+
+Alternatively, you can use docker-compose directly:
+
+```bash
+# Start recon services
+docker-compose up -d
+
+# Start web services
+docker-compose -f docker-compose.web.yml up -d
+```
+
+## 📝 Notes
+
+- The recon services and web services are separated into different docker-compose files for better management
+- The web interface will be available at `http://localhost:3000`
+- The backend API will be available at `http://localhost:3001`
+- Recon output files are stored in `recon/output/`
