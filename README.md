@@ -25,6 +25,19 @@ git clone https://github.com/julioxus/autobounty.git
 cd autobounty
 ```
 
+### Configuration
+
+Before starting the services, you need to configure your target domains:
+
+1. Add your target domains to `recon/targets.txt`, one domain per line:
+```bash
+example.com
+example.org
+example.net
+```
+
+2. Make sure the `recon/output` directory exists (it will be created automatically when running the services)
+
 ### Using Makefile
 
 The project includes a Makefile to simplify common operations:
@@ -79,3 +92,4 @@ docker-compose -f docker-compose.web.yml up -d
 - The web interface will be available at `http://localhost:3000`
 - The backend API will be available at `http://localhost:3001`
 - Recon output files are stored in `recon/output/`
+- Make sure to add your target domains to `recon/targets.txt` before starting the services
